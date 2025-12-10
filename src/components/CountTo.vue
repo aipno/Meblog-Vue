@@ -1,39 +1,78 @@
 <template>
-  <!-- 显示 d.num 属性的四舍五入取整后的值（若不加四舍五入，滚动时会显示小数点后面的数字） -->
-  <div :class="customClass">{{ d.num.toFixed(0) }}</div>
+  <!-- 数字滚动容器 -->
+  <!-- 使用 tabular-nums 确保数字等宽，避免滚动时宽度抖动 -->
+  <span :class="['tabular-nums', customClass]">
+    {{ formattedValue }}
+    <slot name="suffix">
+        <span v-if="suffix" class="ml-1 text-sm font-normal opacity-70">{{ suffix }}</span>
+    </slot>
+  </span>
 </template>
 
 <script setup>
-import {reactive, watch} from 'vue'
+import {computed, onMounted, reactive, watch} from 'vue'
 import gsap from 'gsap'
-
-// 总数值
-const d = reactive({
-  num: 0
-})
 
 // 对外暴露的属性值
 const props = defineProps({
-  value: { // 属性值名称
-    type: Number, // 类型为数值
-    default: 0 // 默认为 0
+  value: { // 目标数值
+    type: Number,
+    default: 0
+  },
+  initialValue: { // 初始数值
+    type: Number,
+    default: 0
+  },
+  duration: { // 动画时长 (秒)
+    type: Number,
+    default: 1.5
+  },
+  decimals: { // 小数位数
+    type: Number,
+    default: 0
+  },
+  suffix: { // 后缀单位
+    type: String,
+    default: ''
   },
   customClass: { // 自定义样式
-    type: String, // 字符串类型
-    default: '' // 默认为空
+    type: String,
+    default: ''
   }
 })
 
+// 响应式数据
+const d = reactive({
+  num: props.initialValue
+})
+
+// 格式化后的数值
+const formattedValue = computed(() => {
+  return d.num.toFixed(props.decimals)
+})
+
 function animateToValue() {
-  // 从数值 0 滚动到 value 属性指定的值，动画时间为 0.5s
+  // 从当前值滚动到 value 属性指定的值
   gsap.to(d, {
-    duration: 0.5,
-    num: props.value
+    duration: props.duration,
+    num: props.value,
+    ease: "power2.out" // 添加缓动效果，先快后慢，更自然
   })
 }
 
-animateToValue()
+// 组件挂载后开始动画
+onMounted(() => {
+  animateToValue()
+})
 
-// 侦听属性, 监听 props.value 的变化，一旦 props.value 发生变化，就调用 animateToValue 函数执行动画
+// 侦听属性, 监听 props.value 的变化
+// 当数值更新时，自动从当前数值过渡到新数值
 watch(() => props.value, () => animateToValue())
 </script>
+
+<style scoped>
+/* 确保数字等宽，防止滚动时抖动 */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+</style>
