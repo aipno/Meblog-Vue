@@ -1,9 +1,9 @@
 <template>
-  <APlayer :audio="audio" mode="fixed" autoplay="false" preload="none" loop="all" order="list" volume="0.2" :lrcType=1
-    lrcShow="false"></APlayer>
+  <APlayer :audio="audio" :lrcType=1 autoplay="false" loop="all" lrcShow="false" mode="fixed" order="list" preload="none"
+           volume="0.2"></APlayer>
 </template>
 <script setup>
-import { onMounted, ref } from "vue";
+import {onMounted, ref} from "vue";
 import APlayer from "@worstone/vue-aplayer";
 
 

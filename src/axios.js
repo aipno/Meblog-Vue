@@ -1,7 +1,7 @@
 import axios from "axios";
-import { showMessage } from "@/composables/utils.js";
-import {getToken, removeToken} from "@/composables/cookie.js";
-import { useUserStore } from '@/stores/user'
+import {showMessage} from "@/composables/utils.js";
+import {getToken} from "@/composables/cookie.js";
+import {useUserStore} from '@/stores/user'
 
 // 创建 Axios 实例
 const instance = axios.create({
@@ -22,7 +22,7 @@ instance.interceptors.request.use(function (config) {
     return config
 }, function (error) {
     // 对错误请求做些什么
-    return  Promise.reject(error)
+    return Promise.reject(error)
 })
 
 // 添加响应拦截器
@@ -38,6 +38,7 @@ instance.interceptors.response.use(function (response) {
     // 状态码 401
     if (status === 401) {
         showMessage('无访问权限', 'error')
+        const userStore = useUserStore()
         userStore.logout()
         // 刷新页面
     }

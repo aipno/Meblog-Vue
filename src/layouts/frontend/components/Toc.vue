@@ -1,50 +1,73 @@
 <template>
-  <!-- text-sm/[30px] 表示文字小号，行高为 30px -->
   <div v-if="titles && titles.length > 0"
-    class="sticky top-[5.5rem] text-sm/[30px] w-full p-5 mb-3 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700">
+       class="sticky top-[5.5rem] w-full p-5 mb-5 bg-white border border-gray-100 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700 transition-all duration-300">
+
     <!-- 目录标题 -->
-    <h2 class="flex items-center mb-2 font-bold text-gray-900 uppercase dark:text-white">
+    <h2 class="flex items-center mb-4 text-base font-bold text-gray-800 uppercase dark:text-gray-100">
       <!-- 目录图标 -->
-      <svg t="1699441758495" class="icon w-3.5 h-3.5 mr-2" viewBox="0 0 1024 1024" version="1.1"
-        xmlns="http://www.w3.org/2000/svg" p-id="4043" width="200" height="200">
+      <svg class="inline icon w-5 h-5 mr-2" height="200" p-id="4043"
+           version="1.1" viewBox="0 0 1024 1024" width="200" xmlns="http://www.w3.org/2000/svg">
         <path
-          d="M857.6 25.6a76.8 76.8 0 0 1 76.8 76.8v819.2a76.8 76.8 0 0 1-76.8 76.8H166.4a76.8 76.8 0 0 1-76.8-76.8V102.4a76.8 76.8 0 0 1 76.8-76.8h691.2z m-102.4 678.4H473.6l-2.2528 0.064a38.4 38.4 0 0 0 0 76.672L473.6 780.8h281.6l2.2528-0.064a38.4 38.4 0 0 0 0-76.672L755.2 704z m0-230.4H473.6l-2.2528 0.064a38.4 38.4 0 0 0 0 76.672L473.6 550.4h281.6l2.2528-0.064a38.4 38.4 0 0 0 0-76.672L755.2 473.6z m0-230.4H473.6l-2.2528 0.064a38.4 38.4 0 0 0 0 76.672L473.6 320h281.6l2.2528-0.064a38.4 38.4 0 0 0 0-76.672L755.2 243.2z"
-          fill="#6B57FE" p-id="4044"></path>
+            d="M857.6 25.6a76.8 76.8 0 0 1 76.8 76.8v819.2a76.8 76.8 0 0 1-76.8 76.8H166.4a76.8 76.8 0 0 1-76.8-76.8V102.4a76.8 76.8 0 0 1 76.8-76.8h691.2z m-102.4 678.4H473.6l-2.2528 0.064a38.4 38.4 0 0 0 0 76.672L473.6 780.8h281.6l2.2528-0.064a38.4 38.4 0 0 0 0-76.672L755.2 704z m0-230.4H473.6l-2.2528 0.064a38.4 38.4 0 0 0 0 76.672L473.6 550.4h281.6l2.2528-0.064a38.4 38.4 0 0 0 0-76.672L755.2 473.6z m0-230.4H473.6l-2.2528 0.064a38.4 38.4 0 0 0 0 76.672L473.6 320h281.6l2.2528-0.064a38.4 38.4 0 0 0 0-76.672L755.2 243.2z"
+            fill="#6B57FE" p-id="4044"></path>
         <path
-          d="M281.6 691.2a51.2 51.2 0 1 1 0 102.4 51.2 51.2 0 0 1 0-102.4z m0-230.4a51.2 51.2 0 1 1 0 102.4 51.2 51.2 0 0 1 0-102.4z m0-230.4a51.2 51.2 0 1 1 0 102.4 51.2 51.2 0 0 1 0-102.4z"
-          fill="#FFBA00" p-id="4045"></path>
+            d="M281.6 691.2a51.2 51.2 0 1 1 0 102.4 51.2 51.2 0 0 1 0-102.4z m0-230.4a51.2 51.2 0 1 1 0 102.4 51.2 51.2 0 0 1 0-102.4z m0-230.4a51.2 51.2 0 1 1 0 102.4 51.2 51.2 0 0 1 0-102.4z"
+            fill="#FFBA00" p-id="4045"></path>
       </svg>
       文章目录
     </h2>
-    <div class="toc-wrapper" :class="[isDark ? 'dark' : '']">
-      <ul class="toc">
-        <!-- 二级标题 -->
-        <li v-for="(h2, index) in titles" :key="index">
-          <span
-            :class="[h2.index === activeHeadingIndex ? 'active py-1 text-sky-600 border-l-2 border-sky-600 font-bold' : 'text-gray-500 font-normal']"
-            class="pl-5 hover:text-sky-600" @click="scrollToView(h2.offsetTop)">{{
-              h2.text
-            }}</span>
-          <!-- 递归渲染子标题 -->
+
+    <!-- 目录内容容器 -->
+    <div class="toc-wrapper max-h-[70vh] overflow-y-auto custom-scrollbar relative pl-1">
+      <!-- 左侧灰色竖线背景 -->
+      <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-gray-100 dark:bg-gray-700/50 rounded-full z-0"></div>
+
+      <ul class="toc relative z-10">
+        <!-- 一级标题 (h2) -->
+        <li v-for="(h2, index) in titles" :key="index" class="relative">
+          <div
+              :class="[
+              h2.index === activeHeadingIndex
+                ? 'text-sky-600 border-sky-500 bg-sky-50 dark:bg-sky-900/20 dark:text-sky-400 dark:border-sky-400 font-semibold'
+                : 'text-gray-600 border-transparent hover:text-gray-900 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:border-gray-600'
+            ]"
+              :title="h2.text"
+              class="pl-4 py-2 text-sm leading-relaxed border-l-[2px] cursor-pointer transition-all duration-200 rounded-r-md select-none truncate"
+              @click="scrollToView(h2.offsetTop)">
+            {{ h2.text }}
+          </div>
+
+          <!-- 二级标题 (h3) -->
           <template v-if="h2.children && h2.children.length > 0">
-            <ul>
+            <ul class="mt-0.5">
               <li v-for="(child, childIndex) in h2.children" :key="childIndex">
-                <span
-                  :class="[child.index === activeHeadingIndex ? 'active py-1 text-sky-600 border-l-2 border-sky-600 font-bold' : 'text-gray-500 font-normal']"
-                  :style="`padding-left: ${child.level * 15 + 20}px`" class="hover:text-sky-600"
-                  @click="scrollToView(child.offsetTop)">
+                <div
+                    :class="[
+                    child.index === activeHeadingIndex
+                      ? 'text-sky-600 border-sky-500 bg-sky-50 dark:bg-sky-900/20 dark:text-sky-400 dark:border-sky-400 font-semibold'
+                      : 'text-gray-500 border-transparent hover:text-gray-900 hover:border-gray-300 dark:text-gray-500 dark:hover:text-gray-300 dark:hover:border-gray-600'
+                  ]"
+                    :title="child.text"
+                    class="pl-7 py-1.5 text-sm leading-relaxed border-l-[2px] cursor-pointer transition-all duration-200 rounded-r-md select-none truncate"
+                    @click="scrollToView(child.offsetTop)">
                   {{ child.text }}
-                </span>
-                <!-- 递归渲染更深层次的子标题 -->
+                </div>
+
+                <!-- 三级标题 (h4及以下) -->
                 <template v-if="child.children && child.children.length > 0">
-                  <ul>
+                  <ul class="mt-0.5">
                     <li v-for="(grandChild, grandChildIndex) in child.children" :key="grandChildIndex">
-                      <span
-                        :class="[grandChild.index === activeHeadingIndex ? 'active py-1 text-sky-600 border-l-2 border-sky-600 font-bold' : 'text-gray-500 font-normal']"
-                        :style="`padding-left: ${grandChild.level * 15 + 20}px`" class="hover:text-sky-600"
-                        @click="scrollToView(grandChild.offsetTop)">
+                      <div
+                          :class="[
+                            grandChild.index === activeHeadingIndex
+                              ? 'text-sky-600 border-sky-500 bg-sky-50 dark:bg-sky-900/20 dark:text-sky-400 dark:border-sky-400 font-semibold'
+                              : 'text-gray-400 border-transparent hover:text-gray-900 hover:border-gray-300 dark:text-gray-500 dark:hover:text-gray-300 dark:hover:border-gray-600'
+                          ]"
+                          :title="grandChild.text"
+                          class="pl-10 py-1.5 text-xs leading-relaxed border-l-[2px] cursor-pointer transition-all duration-200 rounded-r-md select-none truncate"
+                          @click="scrollToView(grandChild.offsetTop)">
                         {{ grandChild.text }}
-                      </span>
+                      </div>
                     </li>
                   </ul>
                 </template>
@@ -58,8 +81,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { useDark } from '@vueuse/core'
+import {onBeforeUnmount, onMounted, ref} from 'vue'
+import {useDark} from '@vueuse/core'
 
 // 是否是暗黑模式
 const isDark = useDark()
@@ -95,7 +118,7 @@ onMounted(() => {
   })
 
   // 配置监视子节点的变化
-  const config = { childList: true, subtree: true }
+  const config = {childList: true, subtree: true}
   // 开始观察正文 div 的内容变化
   observer.observe(container, config)
 })
@@ -129,6 +152,7 @@ function handleContentScroll() {
       }
     })
   }
+
   // 检查所有标题
   checkTitles(titles.value)
 }
@@ -138,12 +162,12 @@ onBeforeUnmount(() => window.removeEventListener('scroll', handleContentScroll))
 
 // 滚动到指定的位置
 function scrollToView(offsetTop) {
-  window.scrollTo({ top: offsetTop, behavior: "smooth" });
+  window.scrollTo({top: offsetTop, behavior: "smooth"});
 }
 
 // 初始化标题数据
 function initTocData(container) {
-  // 只提取二级、三级标题
+  // 只提取二级、三级、四级等标题
   let levels = ['h2', 'h3', 'h4', 'h5', 'h6']
   let headings = container.querySelectorAll(levels)
 
@@ -160,7 +184,7 @@ function initTocData(container) {
     let headingLevel = parseInt(heading.tagName.substring(1))
     // 标题文字
     let headingText = heading.innerText
-    // 标题的位置（距离顶部的距离）
+    // 标题的位置（距离顶部的距离），减去 Header 高度和一些缓冲
     let offsetTop = heading.offsetTop - 95
 
     //创建当前标题节点
@@ -204,59 +228,21 @@ function initTocData(container) {
 </script>
 
 <style scoped>
-::v-deep(.toc-wrapper) {
-  position: relative;
-  overflow-x: hidden;
-  overflow-y: auto;
-  max-height: 75vh;
-  text-overflow: ellipsis;
-  scroll-behavior: smooth;
+/* 自定义滚动条样式 */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
 }
 
-/* 为目录项添加自动换行样式 */
-::v-deep(.toc li span) {
-  display: inline-block;
-  white-space: normal;
-  word-wrap: break-word;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  max-width: 100%;
-  line-height: 1.4;
-  padding-top: 2px;
-  padding-bottom: 2px;
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-::v-deep(.toc:before) {
-  content: " ";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  z-index: -1;
-  width: 2px;
-  background: #eaecef;
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #e5e7eb;
+  border-radius: 20px;
 }
 
-::v-deep(.dark .toc:before) {
-  content: " ";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  z-index: -1;
-  width: 2px;
-  background: #30363d;
-}
-
-::v-deep(.dark .toc li span) {
-  color: #9e9e9e;
-}
-
-::v-deep(.dark .toc li .active) {
-  color: rgb(2 132 199 / 1);
-}
-
-::v-deep(.dark .toc li span:hover) {
-  color: rgb(2 132 199 / 1);
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #4b5563;
 }
 </style>

@@ -1,62 +1,81 @@
 <template>
-  <!-- text-sm/[30px] 表示文字小号，行高为 30px -->
   <div v-if="titles && titles.length > 0"
-       :class="[currScrollY > 0 ? 'top-0' : 'top-[5.5rem]']"
-       class="sticky text-sm/[30px] w-[75%] h-0 mb-3 transition-all float-right pr-[35px]">
-    <!-- 目录标题 -->
-    <h2 class="flex items-center mb-2 font-bold text-gray-900 uppercase dark:text-gray-400">
-      <!-- 目录图标 -->
-      <svg class="icon w-3.5 h-3.5 mr-2" height="200" p-id="4043" t="1699441758495"
-           version="1.1" viewBox="0 0 1024 1024" width="200" xmlns="http://www.w3.org/2000/svg">
-        <path
-            d="M857.6 25.6a76.8 76.8 0 0 1 76.8 76.8v819.2a76.8 76.8 0 0 1-76.8 76.8H166.4a76.8 76.8 0 0 1-76.8-76.8V102.4a76.8 76.8 0 0 1 76.8-76.8h691.2z m-102.4 678.4H473.6l-2.2528 0.064a38.4 38.4 0 0 0 0 76.672L473.6 780.8h281.6l2.2528-0.064a38.4 38.4 0 0 0 0-76.672L755.2 704z m0-230.4H473.6l-2.2528 0.064a38.4 38.4 0 0 0 0 76.672L473.6 550.4h281.6l2.2528-0.064a38.4 38.4 0 0 0 0-76.672L755.2 473.6z m0-230.4H473.6l-2.2528 0.064a38.4 38.4 0 0 0 0 76.672L473.6 320h281.6l2.2528-0.064a38.4 38.4 0 0 0 0-76.672L755.2 243.2z"
-            fill="#6B57FE" p-id="4044"></path>
-        <path
-            d="M281.6 691.2a51.2 51.2 0 1 1 0 102.4 51.2 51.2 0 0 1 0-102.4z m0-230.4a51.2 51.2 0 1 1 0 102.4 51.2 51.2 0 0 1 0-102.4z m0-230.4a51.2 51.2 0 1 1 0 102.4 51.2 51.2 0 0 1 0-102.4z"
-            fill="#FFBA00" p-id="4045"></path>
-      </svg>
-      文章目录
-    </h2>
-    <div :class="[isDark ? 'dark' : '']" class="toc-wrapper">
-      <ul class="toc">
-        <!-- 二级标题 -->
-        <li v-for="(h2, index) in titles" :key="index">
-          <span
-              :class="[h2.index === activeHeadingIndex ? 'active py-1 text-sky-600 border-l-2 border-sky-600 font-bold' : 'text-gray-500 font-normal']"
-              class="pl-5 hover:text-sky-600"
-              @click="scrollToView(h2.offsetTop)">{{
-              h2.text
-            }}</span>
-          <!-- 递归渲染子标题 -->
-          <template v-if="h2.children && h2.children.length > 0">
-            <ul>
-              <li v-for="(child, childIndex) in h2.children" :key="childIndex">
-                <span
-                    :class="[child.index === activeHeadingIndex ? 'active py-1 text-sky-600 border-l-2 border-sky-600 font-bold' : 'text-gray-500 font-normal']"
-                    :style="`padding-left: ${child.level * 15 + 20}px`"
-                    class="hover:text-sky-600"
-                    @click="scrollToView(child.offsetTop)">
-                  {{ child.text }}
-                </span>
-                <!-- 递归渲染更深层次的子标题 -->
-                <template v-if="child.children && child.children.length > 0">
-                  <ul>
-                    <li v-for="(grandChild, grandChildIndex) in child.children" :key="grandChildIndex">
-                      <span
-                          :class="[grandChild.index === activeHeadingIndex ? 'active py-1 text-sky-600 border-l-2 border-sky-600 font-bold' : 'text-gray-500 font-normal']"
-                          :style="`padding-left: ${grandChild.level * 15 + 20}px`"
-                          class="hover:text-sky-600"
-                          @click="scrollToView(grandChild.offsetTop)">
-                        {{ grandChild.text }}
-                      </span>
-                    </li>
-                  </ul>
-                </template>
-              </li>
-            </ul>
-          </template>
-        </li>
-      </ul>
+       :class="[currScrollY > 0 ? 'top-4' : 'top-[5.5rem]']"
+       class="fixed right-[max(0px,calc(45%-48rem))] w-[19rem] transition-all duration-300 z-10 hidden xl:block">
+
+    <div
+        class="bg-white border border-gray-100 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
+      <!-- 目录标题 -->
+      <div class="p-4 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50">
+        <h2 class="flex items-center text-sm font-bold text-gray-700 uppercase dark:text-gray-200">
+          <!-- 目录图标 -->
+          <svg class="inline icon w-4 h-4 mr-2 text-sky-500" version="1.1" viewBox="0 0 1024 1024"
+               xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M857.6 25.6a76.8 76.8 0 0 1 76.8 76.8v819.2a76.8 76.8 0 0 1-76.8 76.8H166.4a76.8 76.8 0 0 1-76.8-76.8V102.4a76.8 76.8 0 0 1 76.8-76.8h691.2z m-102.4 678.4H473.6l-2.2528 0.064a38.4 38.4 0 0 0 0 76.672L473.6 780.8h281.6l2.2528-0.064a38.4 38.4 0 0 0 0-76.672L755.2 704z m0-230.4H473.6l-2.2528 0.064a38.4 38.4 0 0 0 0 76.672L473.6 550.4h281.6l2.2528-0.064a38.4 38.4 0 0 0 0-76.672L755.2 473.6z m0-230.4H473.6l-2.2528 0.064a38.4 38.4 0 0 0 0 76.672L473.6 320h281.6l2.2528-0.064a38.4 38.4 0 0 0 0-76.672L755.2 243.2z"
+                fill="currentColor"></path>
+          </svg>
+          本文目录
+        </h2>
+      </div>
+
+      <!-- 目录内容容器 -->
+      <div class="toc-wrapper max-h-[calc(100vh-200px)] overflow-y-auto custom-scrollbar p-2">
+        <ul class="toc space-y-0.5">
+          <!-- 一级标题 (h2) -->
+          <li v-for="(h2, index) in titles" :key="index">
+            <div
+                :class="[
+                h2.index === activeHeadingIndex
+                  ? 'text-sky-600 bg-sky-50 font-medium dark:bg-sky-900/20 dark:text-sky-400'
+                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700/50 dark:hover:text-gray-200'
+              ]"
+                :title="h2.text"
+                class="px-3 py-1.5 text-sm rounded-md cursor-pointer transition-colors duration-200 select-none truncate block"
+                @click="scrollToView(h2.offsetTop)">
+              {{ h2.text }}
+            </div>
+
+            <!-- 二级标题 (h3) -->
+            <template v-if="h2.children && h2.children.length > 0">
+              <ul class="mt-0.5 space-y-0.5 border-l border-gray-100 dark:border-gray-700 ml-3 pl-1">
+                <li v-for="(child, childIndex) in h2.children" :key="childIndex">
+                  <div
+                      :class="[
+                      child.index === activeHeadingIndex
+                        ? 'text-sky-600 bg-sky-50 font-medium dark:bg-sky-900/20 dark:text-sky-400 border-l-2 border-sky-500 -ml-[5px] pl-[13px]'
+                        : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-500 dark:hover:bg-gray-700/50 dark:hover:text-gray-300'
+                    ]"
+                      :title="child.text"
+                      class="px-3 py-1.5 text-xs rounded-md cursor-pointer transition-all duration-200 select-none truncate block"
+                      @click="scrollToView(child.offsetTop)">
+                    {{ child.text }}
+                  </div>
+
+                  <!-- 三级标题 (h4及以下) -->
+                  <template v-if="child.children && child.children.length > 0">
+                    <ul class="mt-0.5 space-y-0.5 border-l border-gray-100 dark:border-gray-700 ml-3 pl-1">
+                      <li v-for="(grandChild, grandChildIndex) in child.children" :key="grandChildIndex">
+                        <div
+                            :class="[
+                              grandChild.index === activeHeadingIndex
+                                ? 'text-sky-600 bg-sky-50 font-medium dark:bg-sky-900/20 dark:text-sky-400 border-l-2 border-sky-500 -ml-[5px] pl-[13px]'
+                                : 'text-gray-400 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-500 dark:hover:bg-gray-700/50 dark:hover:text-gray-300'
+                            ]"
+                            :title="grandChild.text"
+                            class="px-3 py-1.5 text-xs rounded-md cursor-pointer transition-all duration-200 select-none truncate block"
+                            @click="scrollToView(grandChild.offsetTop)">
+                          {{ grandChild.text }}
+                        </div>
+                      </li>
+                    </ul>
+                  </template>
+                </li>
+              </ul>
+            </template>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -115,22 +134,23 @@ function handleContentScroll() {
   // 当前的滚动位置
   let scrollY = window.scrollY
   currScrollY.value = scrollY
-  
+
   // 递归检查所有标题
   function checkTitles(titlesArray) {
     titlesArray.forEach(title => {
       let offsetTop = title.offsetTop
+      // 增加一点偏移量，使选中更自然
       if (scrollY >= offsetTop) {
         activeHeadingIndex.value = title.index
       }
-      
+
       // 递归检查子标题
       if (title.children && title.children.length > 0) {
         checkTitles(title.children)
       }
     })
   }
-  
+
   checkTitles(titles.value)
 }
 
@@ -139,13 +159,14 @@ onBeforeUnmount(() => window.removeEventListener('scroll', handleContentScroll))
 
 // 滚动到指定的位置
 function scrollToView(offsetTop) {
-  window.scrollTo({top: offsetTop, behavior: "smooth"});
+  // 增加偏移量，避免标题被 Header 遮挡
+  window.scrollTo({top: offsetTop + 80, behavior: "smooth"});
 }
 
 // 初始化标题数据
 function initTocData(container) {
   // 提取标题
-  let levels = ['h2', 'h3', 'h4','h5','h6']
+  let levels = ['h2', 'h3', 'h4', 'h5', 'h6']
   let headings = container.querySelectorAll(levels)
 
   // 存放组装后的目录标题数据
@@ -162,6 +183,7 @@ function initTocData(container) {
     // 标题文字
     let headingText = heading.innerText
     // 标题的位置（距离顶部的距离）
+    // 调整 offsetTop 计算，使其更准确
     let offsetTop = heading.offsetTop - 95
 
     // 创建当前标题节点
@@ -183,7 +205,7 @@ function initTocData(container) {
       while (stack.length > 0 && stack[stack.length - 1].level >= headingLevel) {
         stack.pop()
       }
-      
+
       if (stack.length > 0) {
         // 添加到父级的children中
         stack[stack.length - 1].children.push(currentNode)
@@ -191,10 +213,10 @@ function initTocData(container) {
         // 没有合适的父级，添加到根目录
         titlesArr.push(currentNode)
       }
-      
+
       stack.push(currentNode)
     }
-    
+
     // 下标 +1
     index++
   })
@@ -205,59 +227,21 @@ function initTocData(container) {
 </script>
 
 <style scoped>
-::v-deep(.toc-wrapper) {
-  position: relative;
-  overflow-x: hidden;
-  overflow-y: auto;
-  max-height: 75vh;
-  text-overflow: ellipsis;
-  scroll-behavior: smooth;
+/* 自定义滚动条样式 */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
 }
 
-/* 为目录项添加自动换行样式 */
-::v-deep(.toc li span) {
-  display: inline-block;
-  white-space: normal;
-  word-wrap: break-word;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  max-width: 100%;
-  line-height: 1.4;
-  padding-top: 2px;
-  padding-bottom: 2px;
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-::v-deep(.toc:before) {
-  content: " ";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  z-index: -1;
-  width: 2px;
-  background: #eaecef;
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #e5e7eb;
+  border-radius: 20px;
 }
 
-::v-deep(.dark .toc:before) {
-  content: " ";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  z-index: -1;
-  width: 2px;
-  background: #30363d;
-}
-
-::v-deep(.dark .toc li span) {
-  color: #9e9e9e;
-}
-
-::v-deep(.dark .toc li .active) {
-  color: rgb(2 132 199 / 1);
-}
-
-::v-deep(.dark .toc li span:hover) {
-  color: rgb(2 132 199 / 1);
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #4b5563;
 }
 </style>
