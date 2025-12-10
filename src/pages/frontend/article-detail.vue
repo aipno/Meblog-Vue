@@ -235,39 +235,60 @@ function refreshArticleDetail(articleId) {
       })
 
       // 添加复制按钮
-      document.querySelectorAll('pre').forEach(preElement => {
-        // 避免重复添加
-        if (preElement.querySelector('.copy-code-btn')) return;
+      addCopyButtons()
+    })
+  })
+}
 
-        let firstCode = preElement.querySelector('code');
-        if (firstCode) {
-          // 使用更现代的图标按钮 HTML
-          let copyCodeBtn = document.createElement('button');
-          copyCodeBtn.className = 'copy-code-btn absolute top-2 right-2 p-1.5 rounded-md bg-gray-700/50 hover:bg-gray-600 text-gray-300 hover:text-white transition-all opacity-0 group-hover:opacity-100 focus:outline-none';
-          copyCodeBtn.innerHTML = `
+// 动态添加代码复制按钮
+const addCopyButtons = () => {
+  // 获取 article-content 下所有的 pre 标签
+  const preElements = document.querySelectorAll('.article-content pre');
+
+  preElements.forEach(pre => {
+    // 检查是否已经包裹了 wrapper，避免重复处理
+    if (pre.parentNode.classList.contains('code-block-wrapper')) return;
+
+    // 创建包裹容器 div
+    const wrapper = document.createElement('div');
+    wrapper.className = 'code-block-wrapper';
+
+    // 将 pre 插入到 wrapper 中
+    // 1. 在 pre 前面插入 wrapper
+    pre.parentNode.insertBefore(wrapper, pre);
+    // 2. 将 pre 移动到 wrapper 内部
+    wrapper.appendChild(pre);
+
+    // 创建复制按钮
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'copy-code-btn';
+    copyBtn.setAttribute('type', 'button');
+    copyBtn.setAttribute('title', 'Copy code');
+    copyBtn.innerHTML = `
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
             </svg>
           `;
 
-          // 给 pre 添加 group 类以支持 hover 显示
-          preElement.classList.add('group', 'relative');
-          preElement.appendChild(copyCodeBtn);
+    // 绑定点击事件
+    copyBtn.addEventListener('click', () => {
+      // 获取代码文本
+      const codeText = pre.querySelector('code')?.innerText || pre.innerText;
+      copyToClipboard(codeText);
 
-          copyCodeBtn.addEventListener('click', () => {
-            copyToClipboard(preElement.textContent);
+      // 复制成功反馈 (切换图标)
+      const originalIcon = copyBtn.innerHTML;
+      copyBtn.innerHTML = `<svg class="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>`;
 
-            // 复制成功反馈
-            const originalIcon = copyCodeBtn.innerHTML;
-            copyCodeBtn.innerHTML = `<svg class="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>`;
-            setTimeout(() => {
-              copyCodeBtn.innerHTML = originalIcon;
-            }, 2000);
-          });
-        }
-      })
-    })
-  })
+      // 2秒后恢复原图标
+      setTimeout(() => {
+        copyBtn.innerHTML = originalIcon;
+      }, 2000);
+    });
+
+    // 将按钮添加到 wrapper 中 (绝对定位)
+    wrapper.appendChild(copyBtn);
+  });
 }
 
 function copyToClipboard(text) {
@@ -381,18 +402,61 @@ watch(route, (newRoute) => {
   border-radius: 0.5rem;
 }
 
-/* 代码块 */
+/* ================= 代码块相关样式 ================= */
+
+/* 代码块包裹容器：处理定位和间距 */
+::v-deep(.article-content .code-block-wrapper) {
+  position: relative;
+  margin-top: 1.71em;
+  margin-bottom: 1.71em;
+  border-radius: 0.75rem;
+  overflow: hidden; /* 配合圆角，防止子元素溢出 */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  background-color: #1e293b; /* 确保 wrapper 有背景色，避免 pre 滚动时露底 */
+}
+
+/* 原始 pre 标签：负责滚动和代码展示 */
 ::v-deep(.article-content pre) {
   background-color: #1e293b !important; /* slate-800 */
   color: #e2e8f0;
-  border-radius: 0.75rem;
-  overflow-x: auto;
-  margin-top: 1.71em;
-  margin-bottom: 1.71em;
+  overflow-x: auto; /* 允许横向滚动 */
   padding: 1.25em;
   font-size: 0.9em;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  margin: 0 !important; /* 去除 margin，交由 wrapper 控制 */
+  border-radius: 0; /* 圆角交由 wrapper 控制 */
 }
+
+/* 复制按钮：绝对定位在 wrapper 右上角 */
+::v-deep(.article-content .copy-code-btn) {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem;
+  border-radius: 0.375rem;
+  background-color: rgba(55, 65, 81, 0.6); /* gray-700, opacity */
+  color: #d1d5db; /* gray-300 */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0; /* 默认隐藏 */
+  z-index: 10;
+  border: none;
+}
+
+/* 鼠标悬停在 wrapper 上时显示按钮 */
+::v-deep(.article-content .code-block-wrapper:hover .copy-code-btn) {
+  opacity: 1;
+}
+
+/* 按钮悬停状态 */
+::v-deep(.article-content .copy-code-btn:hover) {
+  background-color: #4b5563; /* gray-600 */
+  color: #ffffff;
+}
+
+/* ================================================= */
 
 ::v-deep(.article-content code) {
   color: #ef4444; /* red-500 */

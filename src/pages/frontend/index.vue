@@ -11,54 +11,53 @@
       <div class="col-span-1 lg:col-span-9 flex flex-col">
 
         <!-- 文章列表 -->
-        <!-- 优化：xl 屏幕下显示 3 列，卡片更小 -->
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
+        <!-- 优化：强制双列布局 (md:grid-cols-2)，gap 适度 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <template v-if="articles && articles.length > 0">
             <article v-for="(article, index) in articles" :key="index"
                      :style="{ animationDelay: `${index * 0.1}s` }"
                      class="group bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col h-full animate__animated animate__fadeInUp">
 
               <!-- 封面图 -->
-              <!-- 优化：高度减小，更紧凑 -->
-              <div class="relative w-full h-40 sm:h-48 overflow-hidden cursor-pointer"
+              <!-- 优化：高度适当增加 (h-48 sm:h-56)，适应两列较宽的卡片 -->
+              <div class="relative w-full h-48 sm:h-56 overflow-hidden cursor-pointer"
                    @click="goArticleDetailPage(article.id)">
                 <img :src="article.cover"
                      alt="cover"
-                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                     loading="lazy"/>
+                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy"/>
                 <!-- 遮罩 (仅在hover时显示) -->
                 <div
                     class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                 <!-- 分类标签 (悬浮在左上角) -->
                 <span v-if="article.category"
-                      class="absolute top-3 left-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-[11px] font-bold px-2 py-0.5 rounded-md text-gray-700 dark:text-gray-200 shadow-sm hover:text-sky-600 transition-colors cursor-pointer"
+                      class="absolute top-3 left-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-xs font-bold px-2 py-1 rounded-md text-gray-700 dark:text-gray-200 shadow-sm hover:text-sky-600 transition-colors cursor-pointer"
                       @click.stop="goCategoryArticleListPage(article.categoryId, article.category.name)">
                             {{ article.category.name }}
                         </span>
               </div>
 
               <!-- 内容区 -->
-              <!-- 优化：Padding 减小 -->
-              <div class="flex-1 p-4 flex flex-col">
+              <!-- 优化：Padding p-5，空间更充裕 -->
+              <div class="flex-1 p-5 flex flex-col">
                 <!-- 标签 -->
-                <div v-if="article.tags && article.tags.length > 0" class="flex flex-wrap gap-2 mb-2">
+                <div v-if="article.tags && article.tags.length > 0" class="flex flex-wrap gap-2 mb-3">
                              <span v-for="(tag, tIndex) in article.tags.slice(0, 3)" :key="tIndex"
-                                   class="text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-sky-50 hover:text-sky-600 transition-colors cursor-pointer"
+                                   class="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-sky-50 hover:text-sky-600 transition-colors cursor-pointer"
                                    @click.stop="goTagArticleListPage(tag.id, tag.name)">
                                  # {{ tag.name }}
                              </span>
                 </div>
 
                 <!-- 标题 -->
-                <!-- 优化：字号 text-lg -->
-                <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-2 line-clamp-2 hover:text-sky-600 dark:hover:text-sky-400 transition-colors cursor-pointer leading-snug"
+                <!-- 优化：字号 text-xl -->
+                <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-2 line-clamp-2 hover:text-sky-600 dark:hover:text-sky-400 transition-colors cursor-pointer leading-snug"
                     @click="goArticleDetailPage(article.id)">
                   {{ article.title }}
                 </h2>
 
                 <!-- 摘要 -->
-                <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-3 mb-3 flex-grow leading-relaxed">
+                <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-3 mb-4 flex-grow leading-relaxed">
                   {{ article.summary || '暂无摘要' }}
                 </p>
 
@@ -67,9 +66,8 @@
                     class="flex items-center justify-between text-xs text-gray-400 border-t border-gray-100 dark:border-gray-700 pt-3 mt-auto">
                   <!-- 发布时间 -->
                   <div class="flex items-center gap-1">
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                            stroke-linecap="round" stroke-linejoin="round"
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"
                             stroke-width="2"/>
                     </svg>
                     <span>{{ article.createDate }}</span>
@@ -78,11 +76,10 @@
                   <span class="group-hover:text-sky-500 transition-colors flex items-center gap-0.5 cursor-pointer"
                         @click="goArticleDetailPage(article.id)">
                                 阅读全文 <svg class="w-3 h-3 transition-transform group-hover:translate-x-1" fill="none"
-                                              stroke="currentColor" viewBox="0 0 24 24"><path
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"/></svg>
+                                              stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3"
+                                                                                              stroke-linecap="round"
+                                                                                              stroke-linejoin="round"
+                                                                                              stroke-width="2"/></svg>
                              </span>
                 </div>
               </div>
@@ -185,7 +182,7 @@ const articles = ref([])
 // 当前页码
 const current = ref(1)
 // 每页显示的文章数
-const size = ref(12)
+const size = ref(10) // 确保这里是 10
 // 总文章数
 const total = ref(0)
 // 总共多少页
