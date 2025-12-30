@@ -152,17 +152,8 @@
       <aside class="col-span-12 lg:col-span-3 space-y-6">
         <!-- 侧边栏吸附 -->
         <div class="sticky top-[5.5rem] space-y-6 transition-all duration-300">
-          <!-- 博主信息 -->
-          <UserInfoCard class="animate__animated animate__fadeInRight"/>
-
           <!-- 目录 (仅在有目录数据时显示) -->
           <Toc class="animate__animated animate__fadeInRight animate__delay-100ms"/>
-
-          <!-- 分类 -->
-          <CategoryListCard class="animate__animated animate__fadeInRight animate__delay-200ms"/>
-
-          <!-- 标签 -->
-          <TagListCard class="animate__animated animate__fadeInRight animate__delay-300ms"/>
         </div>
       </aside>
     </div>

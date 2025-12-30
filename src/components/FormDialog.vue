@@ -1,15 +1,7 @@
 <template>
-  <el-dialog
-      v-model="dialogVisible"
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-      :destroy-on-close="destroyOnClose"
-      :draggable="true"
-      :title="title"
-      :width="width"
-      align-center
-      class="meblog-dialog"
-  >
+  <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false"
+    :destroy-on-close="destroyOnClose" :draggable="true" :title="title" :width="width" align-center
+    class="meblog-dialog">
     <!-- 内容区域 -->
     <div class="dialog-content">
       <slot></slot>
@@ -28,7 +20,7 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
+import { ref } from 'vue'
 
 // 对外暴露的属性值
 const props = defineProps({
@@ -82,34 +74,42 @@ defineExpose({
 <style scoped>
 /* 深度选择器覆盖 Element Plus 样式 */
 :deep(.meblog-dialog) {
-  border-radius: 1rem; /* rounded-2xl */
+  border-radius: 1rem;
+  /* rounded-2xl */
   overflow: hidden;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* shadow-2xl */
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  /* shadow-2xl */
 }
 
 /* 头部样式 */
 :deep(.meblog-dialog .el-dialog__header) {
   margin-right: 0;
-  padding: 1.25rem 1.5rem; /* p-5 */
-  border-bottom: 1px solid #f3f4f6; /* border-gray-100 */
+  padding: 1.25rem 1.5rem;
+  /* p-5 */
+  border-bottom: 1px solid #f3f4f6;
+  /* border-gray-100 */
 }
 
 :deep(.dark .meblog-dialog .el-dialog__header) {
-  border-bottom-color: #374151; /* dark:border-gray-700 */
+  border-bottom-color: #374151;
+  /* dark:border-gray-700 */
 }
 
 :deep(.meblog-dialog .el-dialog__title) {
   font-weight: 600;
-  color: #1f2937; /* text-gray-800 */
+  color: #1f2937;
+  /* text-gray-800 */
 }
 
 :deep(.dark .meblog-dialog .el-dialog__title) {
-  color: #f3f4f6; /* dark:text-gray-100 */
+  color: #f3f4f6;
+  /* dark:text-gray-100 */
 }
 
 /* 内容区域样式 */
 :deep(.meblog-dialog .el-dialog__body) {
-  padding: 1.5rem; /* p-6 */
+  padding: 1.5rem;
+  /* p-6 */
 }
 
 /* 底部样式 */
@@ -120,7 +120,8 @@ defineExpose({
 /* 移动端响应式适配 */
 @media (max-width: 640px) {
   :deep(.meblog-dialog) {
-    width: 90% !important; /* 在小屏幕上强制宽度为 90% */
+    width: 90% !important;
+    /* 在小屏幕上强制宽度为 90% */
   }
 }
 </style>

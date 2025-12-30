@@ -30,8 +30,8 @@ export default defineConfig({
         allowedHosts: ['.iswxl.cn'],
         proxy: {
             '/api': {
-                target: 'http://localhost:8080',
-                // target: 'http://121.199.73.2:8080',
+                // target: 'http://localhost:8080',
+                target: 'https://meblog.api.iswxl.cn',
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/api/, '')
             }
