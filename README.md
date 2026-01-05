@@ -135,7 +135,43 @@ npm run preview
 yarn preview
 ```
 
-## 贡献规范
+## 后端接口规范
+
+前端项目依赖后端接口返回统一的数据格式。
+
+**通用响应结构：**
+```json
+{
+  "success": true, // true 表示成功，false 表示失败
+  "message": "操作成功", // 提示消息
+  "data": ... // 数据载荷
+}
+```
+
+ **分页响应结构：**
+ 对于列表接口（如文章列表），`data` 字段应为数组，且响应顶层包含分页信息：
+ ```json
+ {
+   "success": true,
+   "data": [ ... ], // 数据列表数组
+   "total": 100, // 总记录数
+   "current": 1, // 当前页码
+   "size": 10 // 每页大小
+ }
+ ```
+ 
+ ### 文章更新接口（/admin/article/update）
+ 
+ 请求参数：
+ - id：number
+ - title：string
+ - content：string
+ - coverId：number
+ - summary：string
+ - categoryId：number
+ - tagIds：number[]（标签 ID 数组）
+ 
+ ## 贡献规范
 
 ### 代码风格
 

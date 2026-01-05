@@ -9,7 +9,7 @@
       <div class="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto px-4 h-[64px]">
 
         <!-- 左侧：博客 LOGO 与名称 -->
-        <a class="flex items-center gap-3 group" href="/wiki/list">
+        <a class="flex items-center gap-3 group" href="/">
           <div
               class="relative overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 w-9 h-9 transition-transform group-hover:scale-105">
             <img :src="blogSettingsStore.blogSettings.logo" alt="Logo" class="w-full h-full object-cover"/>

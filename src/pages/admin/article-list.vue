@@ -1,45 +1,32 @@
 <template>
   <div class="p-6">
     <!-- 顶部操作栏 (搜索 + 按钮) -->
-    <SearchBar @search="getTableData" @reset="reset">
+    <SearchBar @reset="reset" @search="getTableData">
       <template #search-input>
-        <el-input
-            v-model="searchArticleTitle"
-            clearable
-            placeholder="请输入文章标题"
-            prefix-icon="Search"
-            @keyup.enter="getTableData"
-        />
+        <el-input v-model="searchArticleTitle" clearable placeholder="请输入文章标题" prefix-icon="Search"
+          @keyup.enter="getTableData" />
       </template>
       <template #date-picker>
-        <el-date-picker
-            v-model="pickDate"
-            :shortcuts="shortcuts"
-            end-placeholder="结束时间"
-            range-separator="-"
-            start-placeholder="开始时间"
-            type="daterange"
-            value-format="YYYY-MM-DD"
-            @change="datepickerChange"
-        />
+        <el-date-picker v-model="pickDate" :shortcuts="shortcuts" end-placeholder="结束时间" range-separator="-"
+          start-placeholder="开始时间" type="daterange" value-format="YYYY-MM-DD" @change="datepickerChange" />
       </template>
       <template #actions>
         <div class="flex items-center gap-2">
-          <el-button plain @click="exportCSV" title="导出当前列表 CSV">
+          <el-button plain title="导出当前列表 CSV" @click="exportCSV">
             <el-icon class="mr-1">
-              <Download/>
+              <Download />
             </el-icon>
             导出
           </el-button>
-          <el-button :disabled="selectedRows.length === 0" type="danger" plain @click="batchDelete" title="批量删除选中项">
+          <el-button :disabled="selectedRows.length === 0" plain title="批量删除选中项" type="danger" @click="batchDelete">
             <el-icon class="mr-1">
-              <Delete/>
+              <Delete />
             </el-icon>
             批量删除
           </el-button>
-          <el-button type="primary" @click="isArticlePublishEditorShow = true" title="新建文章">
+          <el-button title="新建文章" type="primary" @click="isArticlePublishEditorShow = true">
             <el-icon class="mr-1">
-              <EditPen/>
+              <EditPen />
             </el-icon>
             写文章
           </el-button>
@@ -47,26 +34,27 @@
       </template>
     </SearchBar>
 
-    <div v-if="searchArticleTitle || (startDate.value && endDate.value)" class="mb-6">
+    <div v-if="searchArticleTitle || (startDate && endDate)" class="mb-6">
       <div class="flex flex-wrap items-center gap-2">
         <span class="text-xs text-gray-400">已应用筛选：</span>
         <span v-if="searchArticleTitle"
           class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-gray-100 text-gray-600 text-xs">
           标题包含 “{{ searchArticleTitle }}”
         </span>
-        <span v-if="startDate.value && endDate.value"
+        <span v-if="startDate && endDate"
           class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-gray-100 text-gray-600 text-xs">
-          时间 {{ startDate.value }} - {{ endDate.value }}
+          时间 {{ startDate }} - {{ endDate }}
         </span>
-        <el-button size="small" link type="primary" @click="reset">清除筛选</el-button>
+        <el-button link size="small" type="primary" @click="reset">清除筛选</el-button>
       </div>
     </div>
 
     <!-- 表格区域 -->
     <el-card class="border-0 !bg-white !rounded-xl table-wrapper" shadow="never">
-      <el-table v-loading="tableLoading" :data="tableData" :row-key="'id'" @selection-change="handleSelectionChange"
-        :header-cell-style="{ background: '#f8fafc', color: '#64748b', fontWeight: '600' }" highlight-current-row
-        style="width: 100%" empty-text="暂无文章，点击右上角写文章开始创作">
+      <el-table v-loading="tableLoading" :data="tableData"
+        :header-cell-style="{ background: '#f8fafc', color: '#64748b', fontWeight: '600' }" :row-key="'id'"
+        empty-text="暂无文章，点击右上角写文章开始创作" highlight-current-row style="width: 100%"
+        @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="48" />
         <el-table-column label="封面" width="100">
           <template #default="scope">
@@ -178,12 +166,12 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <!-- 左侧 -->
                 <div class="space-y-4">
-                  <el-form-item label="文章封面" prop="cover">
+                  <el-form-item label="文章封面" prop="coverId">
                     <div class="flex flex-col gap-3 w-full">
                       <!-- 上传/预览区 -->
                       <div
                         class="w-full aspect-video bg-gray-50 border-2 border-dashed border-gray-200 rounded-lg flex items-center justify-center overflow-hidden hover:border-sky-400 transition-colors cursor-pointer relative group"
-                        @click="$refs.uploadCoverInput.click()" @dragover.prevent @drop="handlePublishCoverDrop">
+                        @click="$refs.uploadCoverInput.click()" @drop="handlePublishCoverDrop" @dragover.prevent>
                         <img v-if="form.cover" :src="form.cover" class="w-full h-full object-cover" />
                         <div v-else class="flex flex-col items-center text-gray-400">
                           <el-icon size="32">
@@ -266,11 +254,11 @@
         <div
           class="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-6 shrink-0 sticky top-0 z-50 shadow-sm">
           <div class="flex items-center gap-3">
-            <el-button circle icon="ArrowLeft" @click="isArticleUpdateEditorShow = false"></el-button>
+            <el-button circle icon="ArrowLeft" @click="cancelEdit"></el-button>
             <h4 class="font-bold text-lg text-gray-800">编辑文章</h4>
           </div>
           <div class="flex items-center gap-3">
-            <el-button @click="isArticleUpdateEditorShow = false">取消</el-button>
+            <el-button @click="cancelEdit">取消</el-button>
             <el-button plain @click="updatePreview = true">预览</el-button>
             <el-button icon="Promotion" type="primary" @click="updateSubmit">保存修改</el-button>
           </div>
@@ -280,10 +268,10 @@
         <div class="flex-1 overflow-y-auto p-6">
           <div class="px-0 sm:px-6 pb-3 text-xs text-gray-500 flex items-center justify-between">
             <span>自动保存：{{ autoSaveTimeUpdate || '未保存' }}</span>
-            <span class="hidden sm:inline">快捷键：Ctrl+S 保存草稿 · Ctrl+Enter 保存 · Esc 关闭</span>
+            <span class="hidden sm:inline">快捷键: Ctrl+S 保存草稿 · Ctrl+Enter 保存 · Esc 关闭</span>
           </div>
           <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-sm p-8 min-h-full">
-            <el-form ref="updateArticleFormRef" :model="updateArticleForm" :rules="rules" label-position="top"
+            <el-form ref="updateArticleFormRef" :model="updateArticleForm" :rules="updateRules" label-position="top"
               size="large">
               <el-form-item label="文章标题" prop="title">
                 <el-input v-model="updateArticleForm.title" maxlength="80" placeholder="请输入引人注目的标题..."
@@ -302,21 +290,21 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <!-- 左侧 -->
                 <div class="space-y-4">
-                  <el-form-item label="文章封面" prop="cover">
+                  <el-form-item label="文章封面" prop="coverId">
                     <div class="flex flex-col gap-3 w-full">
                       <!-- 上传/预览区 -->
                       <div
                         class="w-full aspect-video bg-gray-50 border-2 border-dashed border-gray-200 rounded-lg flex items-center justify-center overflow-hidden hover:border-sky-400 transition-colors cursor-pointer relative group"
-                        @click="$refs.updateUploadCoverInput.click()" @dragover.prevent @drop="handleUpdateCoverDrop">
-                        <img v-if="updateArticleForm.cover" :src="updateArticleForm.coverUrl"
-                          class="w-full h-full object-cover" alt="" />
+                        @click="$refs.updateUploadCoverInput.click()" @drop="handleUpdateCoverDrop" @dragover.prevent>
+                        <img v-if="updateArticleForm.coverId" :src="updateArticleForm.coverUrl" alt=""
+                          class="w-full h-full object-cover" />
                         <div v-else class="flex flex-col items-center text-gray-400">
                           <el-icon size="32">
                             <Plus />
                           </el-icon>
                           <span class="text-xs mt-2">点击上传封面</span>
                         </div>
-                        <div v-if="updateArticleForm.cover"
+                        <div v-if="updateArticleForm.coverId"
                           class="absolute inset-0 bg-black/40 hidden group-hover:flex items-center justify-center text-white font-medium">
                           更换封面
                         </div>
@@ -329,11 +317,11 @@
                         </el-upload>
                       </div>
 
-                      <el-select v-model="updateArticleForm.cover" clearable placeholder="或从图库中选择"
+                      <el-select v-model="updateArticleForm.coverId" clearable placeholder="或从图库中选择"
                         @change="handleSelectImage">
                         <el-option v-for="item in images" :key="item.value" :label="item.label" :value="item.value">
                           <div class="flex items-center gap-2">
-                            <img :src="item.value" class="w-8 h-8 object-cover rounded border" alt="" />
+                            <img :src="item.url" alt="" class="w-8 h-8 object-cover rounded border" />
                             <span class="truncate">{{ item.label }}</span>
                           </div>
                         </el-option>
@@ -350,8 +338,8 @@
                     </el-select>
                   </el-form-item>
 
-                  <el-form-item label="文章标签" prop="tags">
-                    <el-select v-model="updateArticleForm.tags" :loading="tagSelectLoading"
+                  <el-form-item label="文章标签" prop="tagIds">
+                    <el-select v-model="updateArticleForm.tagIds" :loading="tagSelectLoading"
                       :remote-method="remoteMethod" allow-create class="w-full" default-first-option filterable multiple
                       placeholder="搜索或创建标签" remote>
                       <el-option v-for="item in tags" :key="item.value" :label="item.label" :value="item.value" />
@@ -386,8 +374,8 @@
 </template>
 
 <script setup>
-import { reactive, ref, watch, onMounted, onBeforeUnmount } from 'vue'
-import { EditPen, Picture, Plus, Download, Delete } from '@element-plus/icons-vue'
+import { onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
+import { Delete, Download, EditPen, Picture, Plus } from '@element-plus/icons-vue'
 import moment from 'moment'
 import {
   deleteArticle,
@@ -429,8 +417,8 @@ const unsavedPublish = ref(false)
 const publishArticleFormRef = ref(null)
 
 // 查询条件：开始结束时间
-const startDate = reactive({})
-const endDate = reactive({})
+const startDate = ref(null)
+const endDate = ref(null)
 
 // 监听日期组件改变事件，并将开始结束时间设置到变量中
 const datepickerChange = (e) => {
@@ -517,11 +505,38 @@ const rules = {
     { min: 1, max: 80, message: '文章标题要求大于1个字符，小于80个字符', trigger: 'blur' },
   ],
   content: [{ required: true, message: '文章内容不能为空', trigger: 'blur' }],
-  cover: [{ required: true, message: '请上传文章封面', trigger: 'change' }],
+  coverId: [{ required: true, message: '请上传文章封面', trigger: 'change' }],
   categoryId: [{ required: true, message: '请选择文章分类', trigger: 'change' }],
   tags: [{ required: true, message: '请选择文章标签', trigger: 'change' }],
 }
 
+const updateRules = {
+  title: [
+    { required: true, message: '文章标题不能为空', trigger: 'blur' },
+    { min: 1, max: 40, message: '文章标题字数需大于 1 小于 40', trigger: 'blur' },
+  ],
+  content: [{ required: true, message: '文章内容不能为空', trigger: 'blur' }],
+  coverId: [{ required: true, message: '文章封面不能为空', trigger: 'change' }],
+  categoryId: [{ required: true, message: '文章分类不能为空', trigger: 'change' }],
+  tagIds: [{ type: 'array', required: true, min: 1, message: '文章标签不能为空', trigger: 'change' }],
+}
+
+const isArticleUpdateEditorShow = ref(false)
+const updatePreview = ref(false)
+const autoSaveTimeUpdate = ref('')
+const unsavedUpdate = ref(false)
+const updateArticleFormRef = ref(null)
+
+const updateArticleForm = reactive({
+  id: null,
+  title: '',
+  content: '',
+  coverId: null,
+  coverUrl: '',
+  categoryId: null,
+  tagIds: [],
+  summary: ""
+})
 // 更新发布状态
 const handleIsPublishChange = (row) => {
   updateArticleIsPublish({ id: row.id, isPublish: row.isPublish }).then((res) => {
@@ -571,7 +586,6 @@ const onUploadImg = async (files, callback) => {
         let formData = new FormData()
         formData.append("file", file);
         uploadFile(formData).then((res) => {
-          console.log(res)
           console.log('访问路径：' + res.data.url)
           // 调用 callback 函数，回显上传图片
           callback([res.data.url]);
@@ -579,6 +593,12 @@ const onUploadImg = async (files, callback) => {
       });
     })
   );
+}
+
+// 添加取消编辑事件处理
+const cancelEdit = () => {
+  isArticleUpdateEditorShow.value = false
+  localStorage.setItem('isArticleUpdateEditorShow', 'false')
 }
 
 // 文章分类
@@ -621,20 +641,21 @@ const remoteMethod = (query) => {
 const showArticleUpdateEditor = (row) => {
   // 显示编辑文章对话框
   isArticleUpdateEditorShow.value = true
+  localStorage.setItem('isArticleUpdateEditorShow', 'true')
   findImage()
   // 拿到文章 ID
   let articleId = row.id
   getArticleDetail(articleId).then((res) => {
     if (res.success) {
       // 设置表单数据
-      console.log(res.data)
       updateArticleForm.id = res.data.id
       updateArticleForm.title = res.data.title
-      updateArticleForm.cover = res.data.cover
+      updateArticleForm.coverId = res.data.coverId
       updateArticleForm.coverUrl = res.data.coverUrl
+      console.log(updateArticleForm.coverUrl)
       updateArticleForm.content = res.data.content
       updateArticleForm.categoryId = res.data.categoryId
-      updateArticleForm.tags = res.data.tagIds
+      updateArticleForm.tagIds = res.data.tagIds
       updateArticleForm.summary = res.data.summary
     }
   })
@@ -673,7 +694,7 @@ const publishArticleSubmit = () => {
   })
 }
 
-// 保存文章
+// 更新文章
 const updateSubmit = () => {
   updateArticleFormRef.value.validate((valid) => {
     // 校验表单
@@ -681,8 +702,22 @@ const updateSubmit = () => {
       return false
     }
 
-    // 请求更新文章接口
-    updateArticle(updateArticleForm).then((res) => {
+    if (!updateArticleForm.coverId) {
+      showMessage('文章封面不能为空', 'error')
+      return false
+    }
+
+    const payload = {
+      id: Number(updateArticleForm.id),
+      title: updateArticleForm.title,
+      content: updateArticleForm.content,
+      coverId: Number(updateArticleForm.coverId),
+      coverUrl: updateArticleForm.coverUrl,
+      summary: updateArticleForm.summary,
+      categoryId: Number(updateArticleForm.categoryId),
+      tagIds: (updateArticleForm.tagIds || []).map(v => Number(v))
+    }
+    updateArticle(payload).then((res) => {
       if (res.success === false) {
         // 获取服务端返回的错误消息
         let message = res.message
@@ -694,6 +729,7 @@ const updateSubmit = () => {
       showMessage('保存成功')
       // 隐藏编辑框
       isArticleUpdateEditorShow.value = false
+      localStorage.setItem('isArticleUpdateEditorShow', 'false')
       // 重新请求分页接口，渲染列表数据
       getTableData()
     })
@@ -721,24 +757,20 @@ const deleteArticleSubmit = (row) => {
   })
 }
 
-// 是否显示编辑文章对话框
-const isArticleUpdateEditorShow = ref(false)
-const updatePreview = ref(false)
-const autoSaveTimeUpdate = ref('')
-const unsavedUpdate = ref(false)
-// 编辑文章表单引用
-const updateArticleFormRef = ref(null)
+ 
 
-// 修改文章表单对象
-const updateArticleForm = reactive({
-  id: null,
-  title: '',
-  content: '',
-  cover: '',
-  categoryId: null,
-  tags: [],
-  summary: ""
+onMounted(() => {
+  // 确保在组件挂载时，编辑对话框是关闭的
+  isArticleUpdateEditorShow.value = false
+  window.addEventListener('keydown', handleKeyDown)
 })
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', handleKeyDown)
+  clearTimeout(autoSaveTimerPublish)
+  clearTimeout(autoSaveTimerUpdate)
+})
+
+ 
 
 // 获取分页数据
 function getTableData() {
@@ -754,11 +786,16 @@ function getTableData() {
   })
     .then((res) => {
       if (res.success === true) {
-        tableData.value = res.data
-        current.value = res.current
-        size.value = res.size
-        total.value = res.total
+        tableData.value = res.data || []
+        current.value = res.current || 1
+        size.value = res.size || 10
+        total.value = res.total || 0
+      } else {
+        showMessage(res.message || '获取文章列表失败', 'error')
       }
+    })
+    .catch(err => {
+      console.error('获取文章列表失败:', err)
     })
     .finally(() => tableLoading.value = false) // 隐藏表格 loading
 }
@@ -785,7 +822,8 @@ const batchDelete = () => {
       }
       getTableData()
     })
-  }).catch(() => { })
+  }).catch(() => {
+  })
 }
 
 // 导出 CSV
@@ -822,9 +860,11 @@ function findImage() {
       // 直接使用原始数据
       images.value = res.data.map(item => ({
         label: item.imageId,
-        value: item.imageUrl
+        value: item.imageId,
+        url: item.imageUrl
       }))
     })
+
 }
 
 findImage()
@@ -848,7 +888,21 @@ const beforeUpload = (file) => {
     // 成功则设置表单对象中的封面链接，并提示上传成功
     // 判断当前是发布还是编辑
     if (isArticleUpdateEditorShow.value) {
-      updateArticleForm.cover = e.data.url
+      updateArticleForm.coverId = e.data.id ?? updateArticleForm.coverId
+      updateArticleForm.coverUrl = e.data.url
+      if (!e.data.id && e.data.url) {
+        findImageList().then(res => {
+          images.value = res.data.map(item => ({
+            label: item.imageId,
+            value: item.imageId,
+            url: item.imageUrl
+          }))
+          const match = images.value.find(i => i.url === e.data.url)
+          if (match) {
+            updateArticleForm.coverId = match.value
+          }
+        })
+      }
     } else {
       form.cover = e.data.url
     }
@@ -859,14 +913,20 @@ const beforeUpload = (file) => {
 
 function handleSelectImage(val) {
   if (isArticleUpdateEditorShow.value) {
-    updateArticleForm.cover = val
+    updateArticleForm.coverId = val
+    const item = images.value.find(i => i.value === val)
+    if (item) {
+      updateArticleForm.coverUrl = item.url
+    }
   } else {
-    form.cover = val
+    const item = images.value.find(i => i.value === val)
+    form.cover = item ? item.url : val
   }
 }
 
 let autoSaveTimerPublish = null
 let autoSaveTimerUpdate = null
+
 function autoSavePublishDraft() {
   const data = {
     title: form.title,
@@ -880,6 +940,7 @@ function autoSavePublishDraft() {
   localStorage.setItem('article_publish_draft', JSON.stringify(data))
   autoSaveTimePublish.value = data.time
 }
+
 function loadPublishDraft() {
   const raw = localStorage.getItem('article_publish_draft')
   if (!raw) return
@@ -892,23 +953,27 @@ function loadPublishDraft() {
     form.categoryId = data.categoryId || form.categoryId
     form.tags = data.tags || form.tags
     autoSaveTimePublish.value = data.time || ''
-  } catch { }
+  } catch {
+  }
 }
+
 function autoSaveUpdateDraft() {
   const key = `article_update_draft_${updateArticleForm.id || 'temp'}`
   const data = {
     id: updateArticleForm.id,
     title: updateArticleForm.title,
     content: updateArticleForm.content,
-    cover: updateArticleForm.cover,
+    coverId: updateArticleForm.coverId,
+    coverUrl: updateArticleForm.coverUrl,
     summary: updateArticleForm.summary,
     categoryId: updateArticleForm.categoryId,
-    tags: updateArticleForm.tags,
+    tagIds: updateArticleForm.tagIds,
     time: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
   }
   localStorage.setItem(key, JSON.stringify(data))
   autoSaveTimeUpdate.value = data.time
 }
+
 function loadUpdateDraft() {
   const key = `article_update_draft_${updateArticleForm.id || 'temp'}`
   const raw = localStorage.getItem(key)
@@ -917,12 +982,14 @@ function loadUpdateDraft() {
     const data = JSON.parse(raw)
     updateArticleForm.title = data.title || updateArticleForm.title
     updateArticleForm.content = data.content || updateArticleForm.content
-    updateArticleForm.cover = data.cover || updateArticleForm.cover
+    updateArticleForm.coverId = data.coverId ?? updateArticleForm.coverId
+    updateArticleForm.coverUrl = data.coverUrl ?? updateArticleForm.coverUrl
     updateArticleForm.summary = data.summary || updateArticleForm.summary
     updateArticleForm.categoryId = data.categoryId || updateArticleForm.categoryId
-    updateArticleForm.tags = data.tags || updateArticleForm.tags
+    updateArticleForm.tagIds = data.tagIds || updateArticleForm.tagIds
     autoSaveTimeUpdate.value = data.time || ''
-  } catch { }
+  } catch {
+  }
 }
 
 watch(form, () => {
@@ -964,7 +1031,8 @@ function handleKeyDown(e) {
       if (unsavedPublish.value) {
         showModel('存在未保存修改，确定关闭？').then(() => {
           isArticlePublishEditorShow.value = false
-        }).catch(() => { })
+        }).catch(() => {
+        })
       } else {
         isArticlePublishEditorShow.value = false
       }
@@ -980,22 +1048,15 @@ function handleKeyDown(e) {
       e.preventDefault()
       if (unsavedUpdate.value) {
         showModel('存在未保存修改，确定关闭？').then(() => {
-          isArticleUpdateEditorShow.value = false
-        }).catch(() => { })
+          cancelEdit()
+        }).catch(() => {
+        })
       } else {
-        isArticleUpdateEditorShow.value = false
+        cancelEdit()
       }
     }
   }
 }
-onMounted(() => {
-  window.addEventListener('keydown', handleKeyDown)
-})
-onBeforeUnmount(() => {
-  window.removeEventListener('keydown', handleKeyDown)
-  clearTimeout(autoSaveTimerPublish)
-  clearTimeout(autoSaveTimerUpdate)
-})
 
 function handlePublishCoverDrop(e) {
   const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]
@@ -1012,6 +1073,7 @@ function handlePublishCoverDrop(e) {
     showMessage('上传成功')
   })
 }
+
 function handleUpdateCoverDrop(e) {
   const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]
   if (!file) return
@@ -1023,7 +1085,21 @@ function handleUpdateCoverDrop(e) {
       showMessage(message, 'error')
       return
     }
-    updateArticleForm.cover = res.data.url
+    updateArticleForm.coverId = res.data.id ?? updateArticleForm.coverId
+    updateArticleForm.coverUrl = res.data.url
+    if (!res.data.id && res.data.url) {
+      findImageList().then(r => {
+        images.value = r.data.map(item => ({
+          label: item.imageId,
+          value: item.imageId,
+          url: item.imageUrl
+        }))
+        const match = images.value.find(i => i.url === res.data.url)
+        if (match) {
+          updateArticleForm.coverId = match.value
+        }
+      })
+    }
     showMessage('上传成功')
   })
 }

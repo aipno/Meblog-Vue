@@ -121,6 +121,14 @@
 
               <!-- Meta 信息 -->
               <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                <button
+                  class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-gray-50 dark:bg-gray-700/30 hover:bg-gray-100 dark:hover:bg-gray-700/50 text-gray-600 dark:text-gray-300"
+                  title="返回上一级或主页" @click="goBack">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                  </svg>
+                  返回
+                </button>
                 <div class="flex items-center bg-gray-50 dark:bg-gray-700/30 px-3 py-1.5 rounded-full">
                   <svg class="w-4 h-4 mr-1.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
@@ -368,6 +376,14 @@ function copyToClipboard(text) {
 
 const goWikiArticleDetailPage = (articleId) => {
   router.push({ path: '/wiki/' + route.params.wikiId, query: { articleId } })
+}
+
+const goBack = () => {
+  if (window.history.length > 1) {
+    router.back()
+  } else {
+    router.push('/')
+  }
 }
 
 refreshArticleDetail(route.query.articleId)
