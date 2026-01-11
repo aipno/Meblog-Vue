@@ -1,170 +1,116 @@
 import {createRouter, createWebHashHistory} from 'vue-router';
 
 // 统一在这里声明所有路由
-const routes = [
-    {
-        path: '/',  // 路由地址
-        component: () => import('@/pages/frontend/index.vue'),   // 对应组件
-        meta: {
-            title: '首页'
-        },
+const routes = [{
+    path: '/',  // 路由地址
+    component: () => import('@/pages/frontend/index.vue'),   // 对应组件
+    meta: {
+        title: '首页'
     },
-    {
-        path: '/login',  // 登录页面"
-        component: () => import('@/pages/admin/login.vue'),   // 对应组件
-        meta: {
-            title: '登录页'
-        },
+}, {
+    path: '/login',  // 登录页面"
+    component: () => import('@/pages/admin/login.vue'),   // 对应组件
+    meta: {
+        title: '登录页'
     },
-    {
-        path: '/register',  // 注册页
-        component: () => import('@/pages/admin/register.vue'),  // 对应组件
-        meta: {
-            title: '注册页'
-        }
-    },
-    {
-        path: '/archive/list', // 归档页
-        component: () => import('@/pages/frontend/archive-list.vue'),  // 对应组件
-        meta: { // meta 信息
-            title: 'Weblog 归档页'
-        }
-    },
-    {
-        path: '/category/list', // 分类页
-        component: () => import('@/pages/frontend/category-list.vue'),
-        meta: { // meta 信息
-            title: 'Weblog 分类页'
-        }
-    },
-    {
-        path: '/category/article/list', // 分类文章页
-        component: () => import('@/pages/frontend/category-article-list.vue'),
-        meta: { // meta 信息
-            title: 'Weblog 分类文章页'
-        }
-    },
-    {
-        path: '/tag/list', // 标签列表页
-        component: () => import('@/pages/frontend/tag-list.vue'),
-        meta: { // meta 信息
-            title: 'Weblog 标签列表页'
-        }
-    },
-    {
-        path: '/tag/article/list', // 标签列表页
-        component: () => import('@/pages/frontend/tag-article-list.vue'),
-        meta: { // meta 信息
-            title: 'Weblog 标签文章页'
-        }
-    },
-    {
-        path: '/article/:articleId', // 文章详情页
-        component: () => import('@/pages/frontend/article-detail.vue'),
-        meta: { // meta 信息
-            title: 'Weblog 详情页'
-        }
-    },
-    {
-        path: '/wiki/list', // 知识库
-        component: () => import('@/pages/frontend/wiki-list.vue'),
-        meta: {
-            title: '知识库'
-        }
-    },
-    {
-        path: '/wiki/:wikiId', // 知识库详情页
-        component: () => import('@/pages/frontend/wiki-detail.vue'),
-        meta: {
-            title: '知识库详情'
-        }
-    },
-    {
-        path: '/:pathMatch(.*)*',
-        name: 'NotFound',
-        component: () => import('@/pages/frontend/404.vue'),
-        meta: {
-            title: '404 页'
-        }
-    },
-    {
-        path: '/admin', // 后台首页
-        component: () => import('@/layouts/admin/admin.vue'),
-        children: [
-            {
-                path: '/admin/index', // 后台首页
-                component: () => import('@/pages/admin/index.vue'),
-                meta: {
-                    title: '仪表盘'
-                }
-            },
-            {
-                path: "/admin/article/list",
-                component: () => import("@/pages/admin/article-list.vue"),
-                meta: {
-                    title: '文章管理'
-                }
-            },
-            {
-                path: "/admin/category/list",
-                component: () => import("@/pages/admin/category-list.vue"),
-                meta: {
-                    title: '分类管理'
-                }
-            },
-            {
-                path: "/admin/tag/list",
-                component: () => import("@/pages/admin/tag-list.vue"),
-                meta: {
-                    title: '标签管理'
-                }
-            },
-            {
-                path: "/admin/blog/setting",
-                component: () => import("@/pages/admin/blog-setting.vue"),
-                meta: {
-                    title: '博客设置'
-                }
-            },
-            {
-                path: "/admin/wiki/list",
-                component: () => import("@/pages/admin/wiki-list.vue"),
-                meta: {
-                    title: '知识库管理'
-                }
-            },
-            {
-                path: "/admin/user",
-                component: () => import("@/pages/admin/user.vue"),
-                meta: {
-                    title: '用户管理'
-                }
-            },
-            {
-                path: "/admin/role",
-                component: () => import("@/pages/admin/role.vue"),
-                meta: {
-                    title: '角色管理'
-                }
-            },
-            {
-                path: "/admin/file",
-                component: () => import("@/pages/admin/object.vue"),
-                meta: {
-                    title: '文件管理'
-                }
-            }
-        ]
+}, {
+    path: '/register',  // 注册页
+    component: () => import('@/pages/admin/register.vue'),  // 对应组件
+    meta: {
+        title: '注册页'
     }
-];
+}, {
+    path: '/archive/list', // 归档页
+    component: () => import('@/pages/frontend/archive-list.vue'),  // 对应组件
+    meta: { // meta 信息
+        title: 'Weblog 归档页'
+    }
+}, {
+    path: '/category/list', // 分类页
+    component: () => import('@/pages/frontend/category-list.vue'), meta: { // meta 信息
+        title: 'Weblog 分类页'
+    }
+}, {
+    path: '/category/article/list', // 分类文章页
+    component: () => import('@/pages/frontend/category-article-list.vue'), meta: { // meta 信息
+        title: 'Weblog 分类文章页'
+    }
+}, {
+    path: '/tag/list', // 标签列表页
+    component: () => import('@/pages/frontend/tag-list.vue'), meta: { // meta 信息
+        title: 'Weblog 标签列表页'
+    }
+}, {
+    path: '/tag/article/list', // 标签列表页
+    component: () => import('@/pages/frontend/tag-article-list.vue'), meta: { // meta 信息
+        title: 'Weblog 标签文章页'
+    }
+}, {
+    path: '/article/:articleId', // 文章详情页
+    component: () => import('@/pages/frontend/article-detail.vue'), meta: { // meta 信息
+        title: 'Weblog 详情页'
+    }
+}, {
+    path: '/wiki/list', // 知识库
+    component: () => import('@/pages/frontend/wiki-list.vue'), meta: {
+        title: '知识库'
+    }
+}, {
+    path: '/wiki/:wikiId', // 知识库详情页
+    component: () => import('@/pages/frontend/wiki-detail.vue'), meta: {
+        title: '知识库详情'
+    }
+}, {
+    path: '/:pathMatch(.*)*', name: 'NotFound', component: () => import('@/pages/frontend/404.vue'), meta: {
+        title: '404 页'
+    }
+}, {
+    path: '/admin', // 后台首页
+    component: () => import('@/layouts/admin/admin.vue'), children: [{
+        path: '/admin/index', // 后台首页
+        component: () => import('@/pages/admin/index.vue'), meta: {
+            title: '仪表盘'
+        }
+    }, {
+        path: "/admin/article/list", component: () => import("@/pages/admin/article-list.vue"), meta: {
+            title: '文章管理'
+        }
+    }, {
+        path: "/admin/category/list", component: () => import("@/pages/admin/category-list.vue"), meta: {
+            title: '分类管理'
+        }
+    }, {
+        path: "/admin/tag/list", component: () => import("@/pages/admin/tag-list.vue"), meta: {
+            title: '标签管理'
+        }
+    }, {
+        path: "/admin/blog/setting", component: () => import("@/pages/admin/blog-setting.vue"), meta: {
+            title: '博客设置'
+        }
+    }, {
+        path: "/admin/wiki/list", component: () => import("@/pages/admin/wiki-list.vue"), meta: {
+            title: '知识库管理'
+        }
+    }, {
+        path: "/admin/user", component: () => import("@/pages/admin/user.vue"), meta: {
+            title: '用户管理'
+        }
+    }, {
+        path: "/admin/role", component: () => import("@/pages/admin/role.vue"), meta: {
+            title: '角色管理'
+        }
+    }, {
+        path: "/admin/file", component: () => import("@/pages/admin/object.vue"), meta: {
+            title: '文件管理'
+        }
+    }]
+}];
 
 // 创建路由
 const router = createRouter({
     // 指定路由的历史管理方式，hash 模式指的是 URL 的路径是通过 hash 符号（#）进行标识
-    history: createWebHashHistory(),
-    // routes: routes 的缩写
-    routes,
-    // 每次切换路由后，页面滚动到顶部
+    history: createWebHashHistory(), // routes: routes 的缩写
+    routes, // 每次切换路由后，页面滚动到顶部
     scrollBehavior() {
         return {top: 0}
     }

@@ -26,9 +26,7 @@ export const useUserStore = defineStore('user', () => {
         }
 
         return {userInfo, setUserInfo, logout}
-    },
-// 开启持久化
+    }, // 开启持久化
     {
         persist: true,
-    }
-)
+    })

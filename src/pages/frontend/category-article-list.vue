@@ -16,10 +16,11 @@
           <div class="flex items-center justify-between mb-4 pb-4 border-b border-gray-100 dark:border-gray-700">
             <h2 class="flex items-center text-lg font-bold text-gray-800 dark:text-gray-100">
               <span class="p-2 mr-3 rounded-lg bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400">
-                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                                                                                                  stroke-linecap="round"
-                                                                                                  stroke-linejoin="round"
-                                                                                                  stroke-width="2"/></svg>
+                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path
+                     d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     stroke-width="2"/></svg>
               </span>
               分类检索
               <span v-if="route.query.name" class="ml-2 text-sm font-normal text-gray-500 dark:text-gray-400">
@@ -42,8 +43,9 @@
                class="group relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-full cursor-pointer transition-all duration-200 border select-none"
                @click="goCategoryArticleListPage(category.id, category.name)">
               <span>{{ category.name }}</span>
-              <span :class="[route.query.id == category.id ? 'text-white' : 'text-gray-400 group-hover:text-sky-600 dark:text-gray-400 dark:group-hover:text-white']"
-                    class="ml-2 text-xs opacity-80 bg-black/10 dark:bg-white/20 px-1.5 py-0.5 rounded-full">
+              <span
+                  :class="[route.query.id == category.id ? 'text-white' : 'text-gray-400 group-hover:text-sky-600 dark:text-gray-400 dark:group-hover:text-white']"
+                  class="ml-2 text-xs opacity-80 bg-black/10 dark:bg-white/20 px-1.5 py-0.5 rounded-full">
                   {{ category.articlesTotal }}
               </span>
             </a>
@@ -73,7 +75,8 @@
                          <span
                              class="flex items-center bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded text-gray-500 dark:text-gray-300">
                              <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path
-                                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"
+                                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                 stroke-linecap="round" stroke-linejoin="round"
                                  stroke-width="2"/></svg>
                              {{ article.createDate }}
                          </span>
@@ -116,7 +119,8 @@
                 </defs>
                 <!-- 简化的空状态占位图，实际请使用原文件中的 SVG -->
                 <circle cx="300" cy="300" fill="url(#empty-grad)" r="200"/>
-                <text dominant-baseline="middle" fill="#9ca3af" font-family="sans-serif" font-size="24" text-anchor="middle"
+                <text dominant-baseline="middle" fill="#9ca3af" font-family="sans-serif" font-size="24"
+                      text-anchor="middle"
                       x="50%" y="50%">暂无文章
                 </text>
               </svg>

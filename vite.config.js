@@ -9,31 +9,20 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-    plugins: [
-        vue(),
-        vueDevTools(),
-        AutoImport({
-            resolvers: [ElementPlusResolver()],
-        }),
-        Components({
-            resolvers: [ElementPlusResolver()],
-        }),
-    ],
-    resolve: {
+    plugins: [vue(), vueDevTools(), AutoImport({
+        resolvers: [ElementPlusResolver()],
+    }), Components({
+        resolvers: [ElementPlusResolver()],
+    }),], resolve: {
         alias: {
             // 定义一个别名 '@'，该别名对应于当前 JavaScript 模块文件所在目录下的 'src' 目录的绝对文件路径。
             '@': fileURLToPath(new URL('./src', import.meta.url)),
         },
-    },
-    server: {
-        host: '0.0.0.0',
-        allowedHosts: ['.iswxl.cn'],
-        proxy: {
+    }, server: {
+        host: '0.0.0.0', allowedHosts: ['.iswxl.cn'], proxy: {
             '/api': {
-                target: 'http://localhost:8080',
-                // target: 'https://meblog.api.iswxl.cn',
-                changeOrigin: true,
-                rewrite: (path) => path.replace(/^\/api/, '')
+                target: 'http://localhost:8080', // target: 'https://meblog.api.iswxl.cn',
+                changeOrigin: true, rewrite: (path) => path.replace(/^\/api/, '')
             }
         }
     }
