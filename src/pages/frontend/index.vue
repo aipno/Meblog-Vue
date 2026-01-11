@@ -236,6 +236,7 @@
   <ScrollToTopButton></ScrollToTopButton>
 
   <Footer></Footer>
+  <Encouraging></Encouraging>
 </template>
 
 <script setup>
@@ -250,6 +251,7 @@ import {initTooltips} from 'flowbite'
 import {onMounted, ref} from 'vue'
 import {getArticlePageList} from '@/api/frontend/article.js'
 import {useRouter} from 'vue-router'
+import Encouraging from "@/components/Encouraging.vue";
 
 onMounted(() => {
   initTooltips();

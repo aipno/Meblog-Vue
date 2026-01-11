@@ -25,8 +25,10 @@
         <div class="flex items-center md:order-2 gap-1.5 md:gap-3">
 
           <!-- 搜索按钮 (移动端 & PC) -->
-          <button class="md:hidden text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2 transition-colors" type="button"
-                  @click="clickSearchBtn">
+          <button
+              class="md:hidden text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2 transition-colors"
+              type="button"
+              @click="clickSearchBtn">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round"
                     stroke-width="2"/>
@@ -34,8 +36,10 @@
           </button>
 
           <!-- 暗黑模式切换 (移动端优先展示在顶部，不再藏在菜单里) -->
-          <button class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2 transition-colors" type="button"
-                  @click="toggleDark()">
+          <button
+              class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2 transition-colors"
+              type="button"
+              @click="toggleDark()">
             <svg v-if="!isDark" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
               <path clip-rule="evenodd"
                     d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
@@ -70,8 +74,9 @@
           <!-- 登录/用户头像 (PC端) -->
           <div class="hidden md:block">
             <div v-if="!isLogined">
-              <button class="text-sm font-medium text-gray-700 hover:text-sky-600 px-3 py-2 rounded-lg hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-800 transition-colors"
-                      @click="$router.push('/login')">
+              <button
+                  class="text-sm font-medium text-gray-700 hover:text-sky-600 px-3 py-2 rounded-lg hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-800 transition-colors"
+                  @click="$router.push('/login')">
                 登录
               </button>
             </div>
@@ -117,7 +122,8 @@
 
             <!-- 移动端：登录/用户信息展示区域 (仅在移动端显示) -->
             <li class="md:hidden mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-              <div v-if="!isLogined" class="block w-full py-3 px-4 text-center text-white bg-sky-600 rounded-xl hover:bg-sky-700 active:scale-95 transition-all shadow-sm"
+              <div v-if="!isLogined"
+                   class="block w-full py-3 px-4 text-center text-white bg-sky-600 rounded-xl hover:bg-sky-700 active:scale-95 transition-all shadow-sm"
                    @click="$router.push('/login')">
                 立即登录
               </div>
@@ -153,8 +159,10 @@
            @click="router.push('/admin/index')">
           <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke-linecap="round" stroke-linejoin="round"
-                  stroke-width="2"></path>
+            <path
+                d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2"></path>
           </svg>
           进入后台
         </a>
@@ -165,7 +173,8 @@
            data-modal-toggle="popup-modal">
           <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                xmlns="http://www.w3.org/2000/svg">
-            <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round"
+            <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                  stroke-linecap="round" stroke-linejoin="round"
                   stroke-width="2"></path>
           </svg>
           退出登录
@@ -237,7 +246,8 @@
               <div v-if="searchLoading" class="animate-spin text-sky-600" role="status">
                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  <path class="opacity-75"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                         fill="currentColor"></path>
                 </svg>
               </div>
@@ -264,7 +274,8 @@
                 class="hidden md:inline-block px-2 py-0.5 text-xs font-semibold text-gray-500 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">Esc</kbd>
             <svg aria-hidden="true" class="w-3 h-3 md:hidden" fill="none" viewBox="0 0 14 14"
                  xmlns="http://www.w3.org/2000/svg">
-              <path d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+              <path d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" stroke="currentColor" stroke-linecap="round"
+                    stroke-linejoin="round"
                     stroke-width="2"/>
             </svg>
           </button>
@@ -295,13 +306,15 @@
                     <div class="flex items-center mt-2 text-xs text-gray-400 gap-3">
                         <span class="flex items-center">
                             <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                stroke-linecap="round" stroke-linejoin="round"
                                 stroke-width="2"/></svg>
                             {{ article.createDate }}
                         </span>
                       <span v-if="article.category" class="flex items-center">
                              <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path
-                                 d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" stroke-linecap="round" stroke-linejoin="round"
+                                 d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                                 stroke-linecap="round" stroke-linejoin="round"
                                  stroke-width="2"/></svg>
                              {{ article.category.name }}
                         </span>
@@ -331,7 +344,8 @@
             <div v-if="searchWord && !searchLoading">
               <div class="p-3 rounded-full bg-gray-100 dark:bg-gray-700 mb-3">
                 <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"
+                  <path d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        stroke-linecap="round" stroke-linejoin="round"
                         stroke-width="2"/>
                 </svg>
               </div>
